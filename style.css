@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSEBA | Multiservicios Bautista - museba.com</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome 6 Pro / Free CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#009FE3', // Official Brand Cyan
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#0B2545', // Official Brand Dark Navy
+                            900: '#06172b',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(0, 159, 227, 0.08)',
+                        'glow-cyan': '0 0 25px -5px rgba(0, 159, 227, 0.4)',
+                        'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.4)',
+                        'card-elevated': '0 20px 40px -15px rgba(11, 37, 69, 0.07)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Hero Mesh Background */
+        .ambient-mesh {
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(0, 159, 227, 0.12) 0px, transparent 50%),
+                radial-gradient(at 90% 20%, rgba(11, 37, 69, 0.08) 0px, transparent 50%),
+                radial-gradient(at 50% 80%, rgba(56, 189, 248, 0.08) 0px, transparent 50%);
+        }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .glass-dark {
+            background: rgba(11, 37, 69, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 3D Perspective & Layout Styles */
+        .perspective-1000 {
+            perspective: 1200px;
+        }
+
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+
+        .service-card-3d {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            will-change: transform;
+            transform: rotateX(0deg) rotateY(0deg) translateZ(0px);
+        }
+
+        .service-card-3d:hover {
+            border-color: #009FE3;
+            box-shadow: 0 25px 50px -12px rgba(0, 159, 227, 0.18);
+        }
+
+        /* 3D Animation States */
+        .card-3d-hidden {
+            opacity: 0;
+            transform: rotateX(30deg) rotateY(-10deg) translateZ(-80px) translateY(50px);
+        }
+
+        .card-3d-visible {
+            opacity: 1;
+            transform: rotateX(0deg) rotateY(0deg) translateZ(0px) translateY(0px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Depth translation classes for nested elements */
+        .translate-z-10 { transform: translateZ(12px); }
+        .translate-z-20 { transform: translateZ(24px); }
+        .translate-z-30 { transform: translateZ(36px); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #009FE3;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Announcement & Contact Bar -->
+    <div class="bg-brand-800 text-white text-xs py-2.5 px-4 border-b border-brand-700/50 hidden sm:block">
+        <div class="max-w-7xl mx-auto flex justify-between items-center font-medium">
+            <div class="flex items-center space-x-6">
+                <span class="inline-flex items-center gap-2 bg-brand-700/60 px-3 py-1 rounded-full text-[11px] font-semibold text-brand-200 border border-brand-600/40">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                    </span>
+                    Disponible para Atender tu Solicitud
+                </span>
+                <a href="mailto:atencionalcliente@museba.com" class="hover:text-brand-300 transition-colors flex items-center gap-2">
+                    <i class="fa-regular fa-envelope text-brand-400"></i> atencionalcliente@museba.com
+                </a>
+            </div>
+            <div class="flex items-center space-x-6">
+                <a href="tel:+50433977785" class="hover:text-brand-300 transition-colors flex items-center gap-2 font-semibold">
+                    <i class="fa-solid fa-phone text-brand-400"></i> +504 3397-7785
+                </a>
+                <span class="text-brand-600">|</span>
+                <span class="text-slate-300"><i class="fa-regular fa-clock text-brand-400 mr-1.5"></i> Lun - Sáb: 8:00 AM - 5:00 PM</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3.5 group">
+                    <div class="w-12 h-12 rounded-2xl bg-white p-2 border border-slate-200/80 shadow-sm group-hover:shadow-glow-cyan transition-all duration-300 flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 300 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="150,22 82,136 218,136" fill="none" stroke="#009FE3" stroke-width="8" stroke-linejoin="round"/>
+                            <polygon points="150,70 96,182 204,182" fill="#009FE3"/>
+                            <polygon points="194,122 152,182 236,182" fill="#0284c7"/>
+                            <polygon points="120,100 44,182 168,182" fill="#0B2545"/>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-display font-black text-2xl tracking-tight text-brand-800">MUSEBA</span>
+                            <span class="text-xs font-black uppercase tracking-wider text-white bg-brand-500 px-1.5 py-0.5 rounded-md shadow-sm">.com</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest -mt-1">Multiservicios Bautista</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Items aligned Right -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="#inicio" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-brand-500 rounded-xl hover:bg-slate-100/80 transition-all">Inicio</a>
+                    <a href="#servicios" onclick="trigger3DServicesScroll(event)" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-brand-500 rounded-xl hover:bg-slate-100/80 transition-all flex items-center gap-1.5">
+                        <span>Servicios</span>
+                        <i class="fa-solid fa-sparkles text-xs text-brand-500"></i>
+                    </a>
+                    <a href="#nosotros" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-brand-500 rounded-xl hover:bg-slate-100/80 transition-all">Nosotros</a>
+                    <a href="#proyectos" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-brand-500 rounded-xl hover:bg-slate-100/80 transition-all">Proyectos</a>
+                    <a href="#reseñas" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-brand-500 rounded-xl hover:bg-slate-100/80 transition-all">Reseñas</a>
+                    <a href="#contacto" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-brand-500 rounded-xl hover:bg-slate-100/80 transition-all">Contacto</a>
+                    
+                    <a href="https://wa.me/50433977785?text=Hola,%20me%20gustaría%20solicitar%20un%20presupuesto" target="_blank" class="ml-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl shadow-glow-emerald transition-all duration-300 flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Cotización</span>
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" aria-label="Abrir Menú" class="p-3 rounded-xl bg-slate-100 text-brand-800 hover:bg-brand-50 focus:outline-none transition-colors border border-slate-200">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/98 backdrop-blur-xl border-b border-slate-200 px-6 pt-4 pb-6 space-y-3 shadow-xl">
+            <a href="#inicio" class="block py-2.5 px-4 rounded-xl font-bold text-brand-800 bg-brand-50">Inicio</a>
+            <a href="#servicios" onclick="trigger3DServicesScroll(event)" class="block py-2.5 px-4 rounded-xl font-bold text-slate-700 hover:bg-slate-50 flex items-center justify-between">
+                <span>Servicios Especializados</span>
+                <i class="fa-solid fa-cube text-brand-500"></i>
+            </a>
+            <a href="#nosotros" class="block py-2.5 px-4 rounded-xl font-bold text-slate-700 hover:bg-slate-50">Nosotros</a>
+            <a href="#proyectos" class="block py-2.5 px-4 rounded-xl font-bold text-slate-700 hover:bg-slate-50">Proyectos Destacados</a>
+            <a href="#reseñas" class="block py-2.5 px-4 rounded-xl font-bold text-slate-700 hover:bg-slate-50">Reseñas de Clientes</a>
+            <a href="#contacto" class="block py-2.5 px-4 rounded-xl font-bold text-slate-700 hover:bg-slate-50">Contacto Directo</a>
+            
+            <a href="https://wa.me/50433977785?text=Hola,%20me%20gustaría%20solicitar%20un%20presupuesto" target="_blank" class="block text-center bg-emerald-500 text-white font-bold py-3.5 rounded-xl shadow-md mt-4 uppercase text-xs tracking-wider">
+                <i class="fa-brands fa-whatsapp text-lg mr-2"></i> Cotizar por WhatsApp
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="relative ambient-mesh py-16 lg:py-28 overflow-hidden border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                
+                <!-- Left Content -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    
+                    <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 border border-brand-200 text-brand-800 text-xs font-bold tracking-wide uppercase mb-8 shadow-sm">
+                        <i class="fa-solid fa-globe text-brand-500"></i>
+                        <span>Portal Oficial: <strong class="text-brand-500">www.museba.com</strong></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    </div>
+
+                    <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15] mb-6">
+                        Servicios integrales de su hogar y comercio <span class="bg-gradient-to-r from-brand-500 via-brand-600 to-brand-800 bg-clip-text text-transparent"> 
+
+                        </span>
+                    </h1>
+
+                    <p class="text-slate-600 text-base sm:text-lg mb-10 max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed">
+                        Soluciones técnicas de alta precisión en climatización, instalaciones eléctricas, herrería y soldadura con chispas de arco, fontanería y mantenimiento corporativo.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="https://wa.me/50433977785?text=Hola,%20deseo%20solicitar%20un%20presupuesto" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm tracking-wide px-8 py-4 rounded-2xl shadow-glow-emerald transition-all duration-300 flex items-center justify-center gap-3 group">
+                            <i class="fa-brands fa-whatsapp text-2xl group-hover:scale-110 transition-transform"></i>
+                            <span>Atención Directa WhatsApp</span>
+                        </a>
+
+                        <button onclick="trigger3DServicesScroll(event)" class="bg-white hover:bg-slate-50 text-brand-800 font-bold text-sm tracking-wide px-8 py-4 rounded-2xl border border-slate-300 hover:border-brand-500 transition-all duration-300 shadow-sm flex items-center justify-center gap-3 group">
+                            <span>Explorar Servicios</span>
+                            <i class="fa-solid fa-arrow-down text-brand-500 group-hover:translate-y-1 transition-transform"></i>
+                        </button>
+                    </div>
+
+                    <!-- Trust Stats -->
+                    <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-slate-200/80 max-w-lg mx-auto lg:mx-0">
+                        <div class="text-center lg:text-left">
+                            <p class="font-display text-2xl sm:text-3xl font-black text-brand-800">100%</p>
+                            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Garantía Formal</p>
+                        </div>
+                        <div class="text-center lg:text-left border-l border-slate-200 pl-6">
+                            <p class="font-display text-2xl sm:text-3xl font-black text-brand-500">+500</p>
+                            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Proyectos Éxito</p>
+                        </div>
+                        <div class="text-center lg:text-left border-l border-slate-200 pl-6">
+
+                            <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Soporte Técnico</p>
+                            <p class="font-display text-2xl sm:text-2xl text-brand-500">De calidad</p>
+
+
+                        </div>
+                    
+                    </div>
+
+                </div>
+
+                <!-- Right Visual Hero Box -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <!-- Decorative Glow -->
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 to-brand-800 rounded-3xl blur-xl opacity-20 animate-pulse"></div>
+                        
+                        <div class="glass-panel p-8 sm:p-10 rounded-3xl relative shadow-card-elevated border border-white">
+                            
+                            <!-- Vector Logo Embed -->
+                            <div class="bg-slate-50 p-6 rounded-2xl mb-8 border border-slate-200/80 flex justify-center items-center shadow-inner">
+                                <svg class="w-56 h-auto drop-shadow" viewBox="0 0 300 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon points="150,22 82,136 218,136" fill="none" stroke="#009FE3" stroke-width="6" stroke-linejoin="round"/>
+                                    <polygon points="150,70 96,182 204,182" fill="#009FE3"/>
+                                    <polygon points="194,122 152,182 236,182" fill="#0284c7"/>
+                                    <polygon points="120,100 44,182 168,182" fill="#0B2545"/>
+                                    <text x="150" y="212" font-family="'Outfit', sans-serif" font-weight="800" font-size="22" fill="#009FE3" text-anchor="middle" letter-spacing="1">MULTISERVICIOS</text>
+                                    <text x="150" y="246" font-family="'Outfit', sans-serif" font-weight="900" font-size="28" fill="#0B2545" text-anchor="middle" letter-spacing="1.5">BAUTISTA</text>
+                                </svg>
+                            </div>
+
+                            <!-- Highlights List -->
+                            <div class="space-y-3.5">
+                                <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-700">Técnicos calificados e inspección rigurosa</span>
+                                </div>
+
+                                <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                                    <div class="w-8 h-8 rounded-lg bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-sm">
+                                        <i class="fa-solid fa-clock-rotate-left"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-700">Atención rápida y diagnósticos certeros</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="servicios" class="py-24 bg-slate-100/70 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-brand-600 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm inline-flex items-center gap-2">
+                    <i class="fa-solid fa-cube text-brand-500"></i>
+                    Especialidades Técnicas
+                </span>
+                <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-brand-800 mt-4">Nuestros Servicios Profesionales</h2>
+                <p class="text-slate-600 mt-3 text-sm sm:text-base font-medium">Ofrecemos cobertura integral para residencias, negocios, plazas e industrias.</p>
+            </div>
+
+            <!-- 3D Perspective Grid Container -->
+            <div id="services-3d-grid" class="perspective-1000 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Service Card 1 -->
+                <div class="service-card-3d preserve-3d card-3d-hidden rounded-3xl p-8 flex flex-col justify-between relative cursor-pointer" onmousemove="handle3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <div class="preserve-3d">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-3xl mb-6 shadow-md translate-z-30">
+                            <i class="fa-solid fa-snowflake"></i>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-brand-800 mb-3 translate-z-20">Refrigeración & Aire Acondicionado</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6 translate-z-10">
+                            Instalación, mantenimiento preventivo, limpieza profunda, recarga de refrigerante y diagnóstico de unidades condensadoras y Mini Split.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/50433977785?text=Deseo%20cotizar%20servicio%20de%20Refrigeración" target="_blank" class="text-brand-600 font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:text-brand-800 transition-colors translate-z-20">
+                        <span>Solicitar Cotización</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="service-card-3d preserve-3d card-3d-hidden rounded-3xl p-8 flex flex-col justify-between relative cursor-pointer" onmousemove="handle3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <div class="preserve-3d">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-3xl mb-6 shadow-md translate-z-30">
+                            <i class="fa-solid fa-bolt-lightning"></i>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-brand-800 mb-3 translate-z-20">Electricidad Residencial & Comercial</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6 translate-z-10">
+                            Instalación, mantenimiento y reparación de sistemas eléctricos residenciales y comerciales, incluyendo tableros de control, iluminación y corrección de cortocircuitos.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/50433977785?text=Deseo%20cotizar%20servicio%20de%20Electricidad" target="_blank" class="text-brand-600 font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:text-brand-800 transition-colors translate-z-20">
+                        <span>Solicitar Cotización</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Service Card 3 -->
+                <div class="service-card-3d preserve-3d card-3d-hidden rounded-3xl p-8 flex flex-col justify-between relative cursor-pointer" onmousemove="handle3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <div class="preserve-3d">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-3xl mb-6 shadow-md translate-z-30">
+                            <!-- Welding torch with spark icon -->
+                            <svg class="w-9 h-9 fill-current" viewBox="0 0 24 24">
+                                <path d="M12 2L9.5 7.5L4 8.5L8 12.5L7 18L12 15L17 18L16 12.5L20 8.5L14.5 7.5L12 2Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-brand-800 mb-3 translate-z-20">Soldadura & Estructuras Metálicas</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6 translate-z-10">
+                            Soldadura técnica con chispas de arco, herrería pesada, fabricación de portones de seguridad, galpones y estructuras de acero.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/50433977785?text=Deseo%20cotizar%20servicio%20de%20Soldadura" target="_blank" class="text-brand-600 font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:text-brand-800 transition-colors translate-z-20">
+                        <span>Solicitar Cotización</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Service Card 4 -->
+                <div class="service-card-3d preserve-3d card-3d-hidden rounded-3xl p-8 flex flex-col justify-between relative cursor-pointer" onmousemove="handle3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <div class="preserve-3d">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-3xl mb-6 shadow-md translate-z-30">
+                            <i class="fa-solid fa-faucet-drip"></i>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-brand-800 mb-3 translate-z-20">Fontanería e Hidráulica</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6 translate-z-10">
+                            Instalación y mantenimiento de bombas de agua, corrección de filtraciones, tuberías de presión y mantenimiento sanitario.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/50433977785?text=Deseo%20cotizar%20servicio%20de%20Fontanería" target="_blank" class="text-brand-600 font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:text-brand-800 transition-colors translate-z-20">
+                        <span>Solicitar Cotización</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Service Card 5 -->
+                <div class="service-card-3d preserve-3d card-3d-hidden rounded-3xl p-8 flex flex-col justify-between relative cursor-pointer" onmousemove="handle3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <div class="preserve-3d">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-3xl mb-6 shadow-md translate-z-30">
+                            <i class="fa-solid fa-building-user"></i>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-brand-800 mb-3 translate-z-20">Mantenimiento Comercial</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6 translate-z-10">
+                            Contratos preventivos periódicos para locales comerciales, bodegas, instalaciones corporativas y plazas de tiendas.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/50433977785?text=Deseo%20cotizar%20Mantenimiento%20Comercial" target="_blank" class="text-brand-600 font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:text-brand-800 transition-colors translate-z-20">
+                        <span>Solicitar Cotización</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Service Card 6 -->
+                <div class="service-card-3d preserve-3d card-3d-hidden rounded-3xl p-8 flex flex-col justify-between relative cursor-pointer" onmousemove="handle3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <div class="preserve-3d">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-3xl mb-6 shadow-md translate-z-30">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-brand-800 mb-3 translate-z-20">Servicios de Inspección & Diagnóstico</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6 translate-z-10">
+                            Evaluaciones técnicas presenciales, emisión de dictámenes de estado de infraestructura y recomendaciones preventivas.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/50433977785?text=Deseo%20cotizar%20Servicios%20de%20Inspección" target="_blank" class="text-brand-600 font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:text-brand-800 transition-colors translate-z-20">
+                        <span>Solicitar Cotización</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="nosotros" class="py-24 bg-white border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="bg-slate-50 p-8 sm:p-10 rounded-3xl border border-slate-200 text-center shadow-sm w-full">
+                        <div class="bg-white p-6 rounded-2xl mb-6 border border-slate-200/80 shadow-sm inline-block">
+                            <svg class="w-60 h-auto" viewBox="0 0 300 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polygon points="150,22 82,136 218,136" fill="none" stroke="#009FE3" stroke-width="6" stroke-linejoin="round"/>
+                                <polygon points="150,70 96,182 204,182" fill="#009FE3"/>
+                                <polygon points="194,122 152,182 236,182" fill="#0284c7"/>
+                                <polygon points="120,100 44,182 168,182" fill="#0B2545"/>
+                                <text x="150" y="212" font-family="'Outfit', sans-serif" font-weight="800" font-size="22" fill="#009FE3" text-anchor="middle" letter-spacing="1">MULTISERVICIOS</text>
+                                <text x="150" y="246" font-family="'Outfit', sans-serif" font-weight="900" font-size="28" fill="#0B2545" text-anchor="middle" letter-spacing="1.5">BAUTISTA</text>
+                            </svg>
+                        </div>
+                        <h4 class="font-display font-bold text-xl text-brand-800 mb-2">Comprehensión & Eficiencia</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">
+                            En <strong class="text-brand-500">MUSEBA</strong> integramos múltiples áreas técnicas bajo un mismo estándar de excelencia operativa.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-brand-600 bg-brand-50 px-4 py-2 rounded-full border border-brand-200">Sobre Nuestra Empresa</span>
+                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-brand-800 mt-4 mb-6 leading-tight">
+                        Tu socio confiable en mantenimiento integral y soluciones técnicas
+                    </h2>
+                    
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 font-medium">
+                        Brindamos soporte especializado en Honduras con repuestos de calidad, diagnósticos precisos y mano de obra garantizada. Nuestra prioridad es mantener tus instalaciones operativas y seguras.
+                    </p>
+
+                    <div class="grid sm:grid-cols-2 gap-5">
+                        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start space-x-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center font-bold text-lg shrink-0">
+                                <i class="fa-solid fa-shield-halved text-base"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-brand-800 text-sm mb-1">Garantía Escrita</h4>
+                                <p class="text-xs text-slate-500">Respaldo total en mano de obra e insumos instalados.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start space-x-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center font-bold text-lg shrink-0">
+                                <i class="fa-solid fa-file-invoice-dollar text-base"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-brand-800 text-sm mb-1">Cotizaciones Claras</h4>
+                                <p class="text-xs text-slate-500">Presupuestos detallados sin cobros ni cargos imprevistos.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Projects Gallery -->
+    <section id="proyectos" class="py-24 bg-slate-100/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-brand-600 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">Trabajos Ejecutados</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-brand-800 mt-4">Proyectos Destacados</h2>
+                <p class="text-slate-600 mt-3 text-sm sm:text-base font-medium">Demostración gráfica de nuestras intervenciones técnicas más recientes.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- Project Card 1 -->
+                <div class="group rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80" alt="Unidad Condensadora de Aire Acondicionado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-900/80 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-brand-600 bg-brand-50 px-3 py-1 rounded-md border border-brand-200 inline-block mb-3">Refrigeración</span>
+                        <h3 class="font-display text-lg font-bold text-brand-800 mb-2">Instalación de Condensadora Exterior</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Mantenimiento preventivo, vacío de líneas y puesta en marcha de aire acondicionado residencial.</p>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="group rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=800&q=80" alt="Soldadura con Chispas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-900/80 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-brand-600 bg-brand-50 px-3 py-1 rounded-md border border-brand-200 inline-block mb-3">Soldadura Especializada</span>
+                        <h3 class="font-display text-lg font-bold text-brand-800 mb-2">Soldadura de Precisión & Herrería</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Unión de perfiles metálicos mediante electrodo revestido con acabado estético y estructural.</p>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="group rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80" alt="Panel Eléctrico Square D" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=800&q=80';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-900/80 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <span class="text-[10px] font-extrabold uppercase tracking-widest text-brand-600 bg-brand-50 px-3 py-1 rounded-md border border-brand-200 inline-block mb-3">Electricidad</span>
+                        <h3 class="font-display text-lg font-bold text-brand-800 mb-2">Panel Eléctrico Square D & Breakers</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Instalación técnica de centros de carga Square D, peinado de cables y etiquetado de circuitos.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reseñas" class="py-24 bg-white border-t border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-brand-600 bg-brand-50 px-4 py-2 rounded-full border border-brand-200">Testimonios Reales</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-brand-800 mt-4">Opiniones de Nuestros Clientes</h2>
+                <p class="text-slate-600 mt-3 text-sm sm:text-base font-medium">Conoce las valoraciones de residencias y comercios satisfechos con nuestro trabajo.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/80 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex text-amber-400 text-sm mb-4 space-x-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-slate-600 text-sm italic leading-relaxed mb-6 font-medium">
+                            "Instalaron la unidad condensadora de mi negocio sin ningún contratiempo. Muy limpios, puntuales y el aire quedó helando perfecto."
+                        </p>
+                    </div>
+                    <div class="flex items-center pt-4 border-t border-slate-200/80">
+                        <div class="w-10 h-10 rounded-full bg-brand-500 text-white font-bold flex items-center justify-center mr-3 text-sm">
+                            RC
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-brand-800 text-sm">Roberto C.</h5>
+                            <span class="text-xs text-slate-500">Cliente Comercial</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/80 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex text-amber-400 text-sm mb-4 space-x-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-slate-600 text-sm italic leading-relaxed mb-6 font-medium">
+                            "Necesitaba reparar el panel eléctrico de la casa y colocar breakers Square D nuevos. El técnico hizo un trabajo impecable y seguro."
+                        </p>
+                    </div>
+                    <div class="flex items-center pt-4 border-t border-slate-200/80">
+                        <div class="w-10 h-10 rounded-full bg-brand-500 text-white font-bold flex items-center justify-center mr-3 text-sm">
+                            MA
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-brand-800 text-sm">María A.</h5>
+                            <span class="text-xs text-slate-500">Residencial</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/80 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex text-amber-400 text-sm mb-4 space-x-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-slate-600 text-sm italic leading-relaxed mb-6 font-medium">
+                            "La soldadura de la verja y el portón de seguridad quedó excelente. Buen trato, precio justo y rápido tiempo de entrega."
+                        </p>
+                    </div>
+                    <div class="flex items-center pt-4 border-t border-slate-200/80">
+                        <div class="w-10 h-10 rounded-full bg-brand-500 text-white font-bold flex items-center justify-center mr-3 text-sm">
+                            JG
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-brand-800 text-sm">Jorge G.</h5>
+                            <span class="text-xs text-slate-500">Cliente Residencial</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contacto" class="py-24 bg-slate-100/80 relative border-t border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Left Dark Info Box -->
+                <div class="lg:col-span-5 glass-dark text-white p-8 sm:p-10 rounded-3xl shadow-xl relative overflow-hidden">
+                    <span class="text-xs font-bold uppercase tracking-widest text-brand-400">Atención Personalizada</span>
+                    <h3 class="font-display text-3xl font-black mt-2 mb-6">Contáctanos Hoy</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-8 font-medium">
+                        Estamos disponibles para atender cotizaciones, inspecciones en campo e intervenciones de emergencia.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-2xl bg-white/10 text-brand-400 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-300 block uppercase font-semibold">Llamadas Directas</span>
+                                <a href="tel:+50433977785" class="text-white font-bold hover:text-brand-300 transition-colors text-base sm:text-lg">+504 3397-7785</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl shrink-0">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-300 block uppercase font-semibold">WhatsApp Directo</span>
+                                <a href="https://wa.me/50433977785?text=Hola,%20deseo%20más%20información" target="_blank" class="text-white font-bold hover:text-emerald-300 transition-colors text-base sm:text-lg">+504 3397-7785</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-2xl bg-white/10 text-brand-400 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-300 block uppercase font-semibold">Correo Electrónico</span>
+                                <a href="mailto:atencionalcliente@museba.com" class="text-white font-bold hover:text-brand-300 transition-colors text-sm sm:text-base">atencionalcliente@museba.com</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Contact Form -->
+                <div class="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-xl">
+                    <h3 class="font-display text-2xl font-bold text-brand-800 mb-2">Solicita tu Presupuesto</h3>
+                    <p class="text-xs text-slate-500 mb-8 font-medium">Déjanos tus datos y te responderemos en el menor tiempo posible.</p>
+
+                    <div id="alert-box" class="hidden mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold">
+                        <i class="fa-solid fa-circle-check mr-2 text-emerald-600"></i> ¡Mensaje enviado con éxito! Nos comunicaremos contigo pronto.
+                    </div>
+
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                        <div class="grid sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Nombre Completo *</label>
+                                <input type="text" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition-colors" placeholder="Tu nombre">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Teléfono / WhatsApp *</label>
+                                <input type="tel" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition-colors" placeholder="+504 3397-7785">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Servicio de Interés</label>
+                            <select class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition-colors">
+                                <option value="refrigeracion">Refrigeración / Aire Acondicionado</option>
+                                <option value="electricidad">Electricidad & Panel Square D</option>
+                                <option value="soldadura">Soldadura & Estructuras Metálicas</option>
+                                <option value="fontaneria">Fontanería e Hidráulica</option>
+                                <option value="mantenimiento">Mantenimiento Comercial</option>
+                                <option value="otro">Otro Servicio Técnico</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Descripción del Requerimiento *</label>
+                            <textarea rows="4" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white transition-colors" placeholder="Escribe los detalles de lo que necesitas..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-4 rounded-xl shadow-glow-cyan transition-all duration-300 uppercase text-xs tracking-wider">
+                            Enviar Solicitud
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-900 text-slate-300 border-t border-brand-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+                
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white p-2.5 rounded-2xl shadow-md">
+                        <svg class="h-12 w-auto" viewBox="0 0 300 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="150,22 82,136 218,136" fill="none" stroke="#009FE3" stroke-width="8" stroke-linejoin="round"/>
+                            <polygon points="150,70 96,182 204,182" fill="#009FE3"/>
+                            <polygon points="194,122 152,182 236,182" fill="#0284c7"/>
+                            <polygon points="120,100 44,182 168,182" fill="#0B2545"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="font-display font-black text-xl text-white tracking-tight">MUSEBA<span class="text-brand-500">.com</span></span>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Multiservicios Bautista</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-400 text-center">
+                    &copy; 2026 Multiservicios Bautista (museba.com). Todos los derechos reservados.
+                </p>
+
+                <div class="flex space-x-6 text-xs text-slate-300 font-bold uppercase tracking-wider">
+                    <a href="#inicio" class="hover:text-brand-400 transition-colors">Inicio</a>
+                    <a href="#servicios" onclick="trigger3DServicesScroll(event)" class="hover:text-brand-400 transition-colors">Servicios</a>
+                    <a href="#contacto" class="hover:text-brand-400 transition-colors">Contacto</a>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp CTA -->
+    <a href="https://wa.me/50433977785?text=Hola,%20quisiera%20solicitar%20información" target="_blank" class="fixed bottom-6 right-6 bg-emerald-500 hover:bg-emerald-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl z-50 transition-all duration-300 hover:scale-110 group border border-white/30" title="Contactar por WhatsApp">
+        <span class="absolute -inset-1 rounded-full bg-emerald-500 opacity-40 animate-ping"></span>
+        <i class="fa-brands fa-whatsapp text-3xl relative z-10"></i>
+    </a>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                if (mobileMenu.classList.contains('hidden')) {
+                    menuIcon.classList.remove('fa-xmark');
+                    menuIcon.classList.add('fa-bars');
+                } else {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-xmark');
+                }
+            });
+        }
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            });
+        });
+
+        // 3D Card Unfold Trigger
+        function animate3DServices() {
+            const cards = document.querySelectorAll('.service-card-3d');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.remove('card-3d-hidden');
+                    card.classList.add('card-3d-visible');
+                }, index * 100);
+            });
+        }
+
+        function trigger3DServicesScroll(event) {
+            event.preventDefault();
+            const servicesSection = document.getElementById('servicios');
+            if (servicesSection) {
+                servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
+            const cards = document.querySelectorAll('.service-card-3d');
+            cards.forEach(card => {
+                card.classList.add('card-3d-hidden');
+                card.classList.remove('card-3d-visible');
+            });
+
+            setTimeout(() => {
+                animate3DServices();
+            }, 300);
+        }
+
+        // Intersection Observer for scroll triggers
+        const servicesSection = document.getElementById('servicios');
+        if (servicesSection) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animate3DServices();
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            observer.observe(servicesSection);
+        }
+
+        // Mouse 3D Tilt Effect
+        function handle3DTilt(e, card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left; 
+            const y = e.clientY - rect.top; 
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((y - centerY) / centerY) * -10;
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        }
+
+        function reset3DTilt(card) {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const alertBox = document.getElementById('alert-box');
+            const form = document.getElementById('contact-form');
+            
+            alertBox.classList.remove('hidden');
+            form.reset();
+
+            setTimeout(() => {
+                alertBox.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
